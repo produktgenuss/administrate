@@ -9,7 +9,10 @@ module Administrate
                                            search_term).run
       resources = apply_collection_includes(resources)
       resources = order.apply(resources)
-      resources = resources.page(params[:page]).per(records_per_page)
+      resources = resources.send(
+        Kaminari.config.page_method_name,
+        params[Kaminari.config.page_method_name],
+      ).per(records_per_page)
       page = Administrate::Page::Collection.new(dashboard, order: order)
 
       render locals: {

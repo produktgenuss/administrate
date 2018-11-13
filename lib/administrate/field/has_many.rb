@@ -40,7 +40,11 @@ module Administrate
       end
 
       def resources(page = 1, order = self.order)
-        resources = order.apply(data).page(page).per(limit)
+        resources = order.apply(data).send(
+          Kaminari.config.page_method_name,
+          page,
+        ).per(limit)
+
         includes.any? ? resources.includes(*includes) : resources
       end
 
